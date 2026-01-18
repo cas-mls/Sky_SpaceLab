@@ -2,14 +2,13 @@
 //
 
 #include <iostream>
+#include <map>
+#include <string>
 
 int main()
 {
 
-	// TODO: Fix Impulse Logic
-	// TODO: Fix Score Motor Logic
-	// TODO: Fox EOS Logic
-    
+	std::map<std::string, bool> re;
 
     enum strictness {Liberal, Conservitive};
 
@@ -23,8 +22,42 @@ int main()
 	strictness spaceLab_adj = Conservitive;
 
 
+    
 
     // Relays
+    re["a"] = false;            // E-11
+	re["b"] = false;            // E-11
+	re["ballIndex"] = false;    // E-9
+	re["bonus"] = false;        // E-9
+	re["captiveBall"] = false;  // Latched Lalue
+	re["change"] = false;       // E10
+	re["coin"] = false;         //E-3
+	re["doubleBonus"] = false;  // E-9
+	re["fiveBallInline"] = false;   // E-10
+	re["c5"] = false;           // E-3
+	re["c10"] = false;          // E-2
+	re["c25"] = false;          // E-2
+	re["pt50"] = false;
+	re["gameOver"] = false;     // Latched Lalue
+	re["game"] = false;         // Latched Lalue
+	re["pt100000"] = false;    // E-10
+	re["k"] = false;            // E-11
+	re["l"] = false;            // E-11
+	re["lock"] = false;         // E-4
+	re["outHole"] = false;      // E-9
+	re["reset"] = false;        // E-3
+	re["rocketSpecial"] = false;    //E-12
+	re["s"] = false;            // E-10
+	re["scoreReset"] = false;   // E-7
+	re["skyLab"] = false;       // E-12
+	re["spaceLab"] = false;     // E-13
+	re["spaceLabSpecial"] = false;   // E-13
+	re["pt10"] = false;         //E-13
+	re["pt100"] = false;        //E-14
+	re["pt1000"] = false;       //E-14
+	re["y"] = false;            // E-11
+
+
     bool a_re = false;          // E-11
     bool b_re = false;          // E-11
     bool ballIndex_re = false;  // E-9
@@ -71,16 +104,16 @@ int main()
     // Advance Unit Stepper
     int advanceCountUnit = 0;           // E-9
     bool advanceResetUnit = false;      // E-15
-	bool advanceCountUnit_eos = 8;      // E-13
+	bool advanceCountUnit_eos = false;  // E-13
 
     // Alternator Unit
     int alternatorUnit = 0;             // E-2
-    const int altUnit_eos = 0;          // TODO: altUnit_eos - Don't know what value;
+    bool altUnit_eos = false;          // TODO: altUnit_eos - Don't know what value;
 
     // Ball Count Unit Stepper
     int ballCountUnit = 0;              // E-6
     bool ballCountResetUnit = false;    // E-6
-    const int ballCount_eos = 10;
+    bool ballCount_eos = false;
 
     // No Match Unit Stepper
     int noMatchUnit = 0;                // E-15
@@ -90,7 +123,7 @@ int main()
     // Credit Unit Stepper
     int creditUnit = 0;                 // E-7
     bool creditResetUnit = false;       // E-6
-    int creditUnit_eos = 10;            // TODO: creditUnit_eos - Don't know what value;
+    bool creditUnit_eos = false;            // TODO: creditUnit_eos - Don't know what value;
 
     // SkyLab Unit Stepper
     int skyLabUnit = 0;                // ???
@@ -105,10 +138,6 @@ int main()
     bool largeChime_sol = false;        // E-15
     bool mediumChime_sol = false;       // E-15
     bool SmallChime_sol = false;        // E-15
-    bool pt10DrumUnit_sol = false;      // E-5
-    bool pt100DrumUnit_sol = false;     // E-5
-    bool pt1000DrumUnit_sol = false;    // E-5
-    bool pt10000DrumUnit_sol = false;   // E-5
     bool totalPaymeter_sol = false;     // E-5
     int pt10 = 0;
     int pt100 = 0;
@@ -142,7 +171,7 @@ int main()
     bool right3CaptiveBall_sw = false; // D-12
     bool left3CaptiveBall_sw = false;  // D-12
     bool right4CaptiveBall_sw = false; // D-12
-    bool left34aptiveBall_sw = false;  // D-12
+    bool left4CaptiveBall_sw = false;  // D-12
 	bool leftBotOutsideRollover_sw = false; // D-13
     bool rightBotOutsideRollover_sw = false; // D-13
 	bool leftKickerCount_sw = false; // D-13
@@ -153,6 +182,8 @@ int main()
     bool leftTopRollover_sw = false;  // E-15
     bool rightBottomRollover_sw = false; // E-15
 	bool leftBottomRollover_sw = false;  // E-15
+    bool leftRolloverButton_sw = false; // E-16
+    bool rightRolloverButton_sw = false; // E-16
 
     // Odd Items
 	bool c5_re_last = false;
@@ -188,7 +219,11 @@ int main()
             if (c5_re && !c5_re_last)
             {
                 alternatorUnit = alternatorUnit == 0 ? 1 : 0;
+				if (settle == 0) altUnit_eos = true;
+                
             }
+            if (settle == 0 && altUnit_eos) altUnit_eos = false;
+
             c5_re_last = c5_re;
             std::cout << "alternatorUnit = " << alternatorUnit << "\n";
 
@@ -268,7 +303,7 @@ int main()
             std::cout << "coin_re = " << coin_re << "\n";
 
             // 5 Cent Logic
-            c5_re = ((alternatorUnit == altUnit_eos) && c5_re)
+            c5_re = (altUnit_eos && c5_re)
                 || (c5_adj == 2 && w_b);
             std::cout << "c5_re = " << c5_re << "\n";
 
@@ -294,20 +329,33 @@ int main()
                     || lock_re);
             std::cout << "lock_re = " << lock_re << "\n";
 
-            // Score Motor Logic
-            if (rocketSpecial_re
-                || spaceLabSpecial_re
-                || skyLab_re
-                || bonus_re
-                || reset_re
-                || scoreMotor != 0
-                || pt50_re
-                || outHole_re
-                || (g_o && c10_re)
-                || (g_o && c25_re))
+            // Score Motor Advance Logic
+            bool r_b_2 = coin_re && !impulse;
+            bool br_b_1 = leftFlipper_sw && !impulse;
+            scoreMotor += (r_b_2 || br_b_1) ? 1 : 0;
+            scoreMotor = (scoreMotor > 6) ? 0 : scoreMotor;
+
+            if (settle == 0)
             {
-                scoreMotor += 1;
-                impulse = true;
+                // Score Motor Logic
+                if (rocketSpecial_re
+                    || spaceLabSpecial_re
+                    || skyLab_re
+                    || bonus_re
+                    || reset_re
+                    || scoreMotor != 0
+                    || pt50_re
+                    || outHole_re
+                    || (g_o && c10_re)
+                    || (g_o && c25_re))
+                {
+                    scoreMotor += 1;
+                    impulse = true;
+                }
+                else
+                {
+                    impulse = false;
+    			}
             }
             else
             {
@@ -320,26 +368,49 @@ int main()
             bool o_r = g_o && !c25_re && !c10_re && coin_re;
             bool b_w = spaceLabSpecial_re && scoreMotor == 5
                 || rocketSpecial_re && scoreMotor == 1
-                || creditUnit == creditUnit_eos
-                || ballCountUnit == ballCount_eos;
+                || creditUnit_eos
+                || ballCount_eos;
             knocker_sol = o_r && b_w;
             std::cout << "knocker_sol = " << knocker_sol << "\n";
 
             //Section 5
             // Score Drum Units Logic
-            pt10 += (pt10_re || (scoreReset_re && pt10 != 0)) ? 10 : 0;
-            pt100 += (pt100_re || (scoreReset_re && pt100 != 0)) ? 100 : 0;
-            pt1000 += (pt1000_re || (scoreReset_re && pt1000 != 0)) ? 1000 : 0;
-            bool b_o_1 = (scoreReset_re && pt10000 != 0);
-            pt10000 += (pt1000 == 9000 || b_o_1) ? 10000 : 0;
-            pt10 = (pt10 >= 100) ? 0 : pt10;
-            pt100 = (pt100 >= 1000) ? 0 : pt100;
-            pt1000 = (pt1000 >= 10000) ? 0 : pt1000;
-            std::cout << "pt10 = " << pt10 << "\n";
-            std::cout << "pt100 = " << pt100 << "\n";
-            std::cout << "pt1000 = " << pt1000 << "\n";
-            std::cout << "pt10000 = " << pt10000 << "\n";
+            if (pt10_re || (scoreReset_re && pt10 != 0))
+            {
+                pt10 += 10;
+                pt10 = (pt10 >= 100) ? 0 : pt10;
+                if (settle == 0) pt10DrumUnit_sol_eos = true;
+            }
+            if (settle == 0 && pt10DrumUnit_sol_eos) pt10DrumUnit_sol_eos = false;
+			std::cout << "pt10 = " << pt10 << "\n";
 
+            if (pt100_re || (scoreReset_re && pt100 != 0))
+            {
+                pt100 += 100;
+                pt100 = (pt100 >= 1000) ? 0 : pt100;
+                if (settle == 0) pt100DrumUnit_sol_eos = true;
+            }
+            if (settle == 0 && pt100DrumUnit_sol_eos) pt100DrumUnit_sol_eos = false;
+            std::cout << "pt100 = " << pt100 << "\n";
+
+            if (pt1000_re || (scoreReset_re && pt1000 != 0))
+            {
+                pt1000 += 1000;
+                pt1000 = (pt1000 >= 1000) ? 0 : pt1000;
+                if (settle == 0) pt1000DrumUnit_sol_eos = true;
+            }
+            if (settle == 0 && pt1000DrumUnit_sol_eos) pt1000DrumUnit_sol_eos = false;
+            std::cout << "pt1000 = " << pt1000 << "\n";
+
+            bool b_o_1 = (scoreReset_re && pt10000 != 0);
+            if (b_o_1 || pt1000 == 9000)
+            {
+                pt10000 += 10000;
+                pt10000 = (pt10000 >= 10000) ? 0 : pt10000;
+                if (settle == 0) pt10000DrumUnit_sol_eos = true;
+            }
+            if (settle == 0 && pt10000DrumUnit_sol_eos) pt10000DrumUnit_sol_eos = false;
+            std::cout << "pt10000 = " << pt1000 << "\n";
 
             // Game Relay Logic
             game_re_trip = ballIndex_re && !game_re;
@@ -384,11 +455,18 @@ int main()
             o_r_1 = o_r_1 || (b_w_4 && game_re);
             ballCountResetUnit = o_r_1;
             ballCountUnit = ballCountResetUnit ? 0 : ballCountUnit;
-
+			// Increment Ball Count Unit
             grey_b = b_w_4 && !game_re;
-            ballCountUnit += grey_b ? 1 : 0;
+            if (grey_b)
+            {
+				if (settle == 0) ballCount_eos = true;
+                ballCountUnit++;
+            }
+            if (settle == 0 && ballCount_eos) ballCount_eos = false;
+            
             std::cout << "ballCountResetUnit = " << ballCountResetUnit << "\n";
             std::cout << "ballCountUnit = " << ballCountUnit << "\n";
+            std::cout << "ballCount_eos = " << ballCount_eos << "\n";
 
             // Section 7
             // Ball Release Solenoid
@@ -405,7 +483,12 @@ int main()
 
             // Credit Unit
             bool grey = grey_w_3 && (c10_re || c25_re);
-            creditUnit += grey && !creditUnit_eos ? 1 : 0;
+            if (grey && !creditUnit_eos)
+            {
+                if (settle == 0) creditUnit_eos = true;
+                creditUnit++;
+            }
+            if (settle == 0 && creditUnit_eos) creditUnit_eos = false;
             std::cout << "creditUnit = " << creditUnit << "\n";
 
             // Section 8
@@ -525,7 +608,7 @@ int main()
                     && right4CaptiveBall_sw;
                 bool y_g = !right1CaptiveBall_sw
                     && left3CaptiveBall_sw
-                    && left34aptiveBall_sw;
+                    && left4CaptiveBall_sw;
                 bool g_r_1 = (captiveBall_re && y_0) || (!captiveBall_re && y_g);
                 rocketSpecial_re = (g_r_1 && fiveBallInline_re)
                     || (br_1 && rocketSpecial_re);
@@ -560,7 +643,7 @@ int main()
                 bool w_grey_2 =
                     (spacelabRocketSpecial_adj == Liberal && advanceCountUnit == 5)
                     && (spacelabRocketSpecial_adj == Conservitive && advanceCountUnit == 7)
-                    && advanceCountUnit == advanceCountUnit_eos;
+                    && advanceCountUnit_eos;
                 spaceLab_re = w_grey_2 
 					|| (scoreMotor != 4 || !spaceLabSpecial_re)
                     && spaceLab_re;
@@ -589,7 +672,7 @@ int main()
                 br_y = br_y || br_3 && advanceCountUnit_eos;
                 br_y = br_y || pt1000DrumUnit_sol_eos && pt1000_re;
 				bool o_b_3 = (right4CaptiveBall_sw && !captiveBall_re)
-                    || (left4aptiveBall_sw && captiveBall_re);
+                    || (left4CaptiveBall_sw && captiveBall_re);
                 pt1000_re = br_y 
                     || (o_b_3 && fiveBallInline_re)
                     || (o_b_3 && !fiveBallInline_re && spaceLab_re);
@@ -599,7 +682,7 @@ int main()
                 bool w_r = o_b_3 && !fiveBallInline_re && !spaceLab_re;
 				w_r = w_r || rightJetBumper_sw || leftJetBumper_sw;
                 w_r = w_r || noMatchUnit_eos;
-                w_r = w_r || pt10DrumUnit_sol == 9 && pt10_re;
+                w_r = w_r || pt10 == 9 && pt10_re;
 				w_r = w_r || !pt100DrumUnit_sol_eos && pt100_re;
                 bool g_4 = leftTopRollover_sw || rightBottomRollover_sw;
 				bool grey_w = rightTopRollover_sw || leftBottomRollover_sw;
@@ -614,10 +697,21 @@ int main()
                     || (scoreMotor == 3 
                     || scoreMotor == 4) && skyLab_re;
                 grey_y_1 = grey_y_1 || g_4 && change_re || grey_w && !change_re;
-				advanceCountUnit += grey_y_1 ? 1 : 0;
+                if (grey_y_1)
+                {
+                    if (settle == 0) advanceCountUnit_eos = true;
+                    advanceCountUnit++;
+                }
+                if (settle == 0 && advanceCountUnit_eos) advanceCountUnit_eos = false;
 				std::cout << "spaceLabSpecial_re = " << spaceLabSpecial_re << "\n";
 
-
+                // No Match Unit Stepper Logic
+                if (leftRolloverButton_sw || rightRolloverButton_sw)
+                {
+                    if (settle == 0) noMatchUnit_eos = true;
+                    noMatchUnit++;
+				}
+				if (settle == 0 && noMatchUnit_eos) noMatchUnit_eos = false;
 
 
             }
