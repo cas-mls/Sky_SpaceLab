@@ -123,7 +123,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Relay.cpp" />
     <ClCompile Include="Skylab.cpp" />
+    <ClCompile Include="Solenoids.cpp" />
+    <ClCompile Include="StepperUnit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Relay.h" />
+    <ClInclude Include="Solenoids.h" />
+    <ClInclude Include="StepperUnit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
