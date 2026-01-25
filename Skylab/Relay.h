@@ -11,25 +11,54 @@ class Relay
 		Relay() 
 		{
 			value = false;
-			priorValue = false;
 			name = "";
 		}
 
 		Relay(std::string n) 
 		{
 			value = false;
-			priorValue = false;
 			name = n;
 		}
 
+
+		Relay(const Relay& self)
+		{
+			name = self.name;
+			value = self.value;
+		}
+
+
 		~Relay() {}
+
+
+		void Assign(Relay self)
+		{
+			name = self.name;
+			value = self.value;
+		}
 
 		bool operator=(const bool val)
 		{
-			priorValue = value;
 			value = val;
 			return value;
 		}
+
+		std::string Print(Relay prior, bool change)
+		{
+			std::string output;
+			if (prior.value != value)
+			{
+				if (change)
+					output += "re " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+				else
+					output += "re " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+			}
+			else
+				if (!change)
+					output += "re " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+			return output;
+		}
+
 
 		operator bool& () { return value; }
 
@@ -39,13 +68,7 @@ class Relay
 
 	private:
 		bool value;
-		bool priorValue;
 		std::string name;
 };
 
-// Overload the << operator
-//std::ostream& operator<<(std::ostream& os, const Relay& re) {
-//	os << "**" << re.name << ": " << re.value;
-//	return os; // Return the stream reference to allow chaining
-//}
 

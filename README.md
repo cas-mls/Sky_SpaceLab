@@ -65,3 +65,24 @@ The 1000 score is not resetting when the reset button is pressed. The number doe
 * Five balls in-line
   * Not sure if this is working correctly.
 
+### Lock
+
+| Contact | Type | Location | Description                                                  |
+| ------- | ---- | -------- | ------------------------------------------------------------ |
+| E       | N.C. | E-3      | In the circuit to reset the relay                            |
+| D       | N.C. | D-6      | In Series with Switch C on Game Over Relay                   |
+| C       | N.O. | A-1      | 6 Volts from the transformer to the lights.                  |
+| B       | N.O. | A-1      | 6 Volts from the transformer to the lights.                  |
+| A       | N.O. | E-4      | In the hold circuit to this relay, through the cabinet bottom kick-off switch. |
+
+### Skylab
+
+Energized by a series circuit through the switches on S-K-Y-L-A-B relays.
+
+| Contact | Type | Location | Description                                              |
+| ------- | ---- | -------- | -------------------------------------------------------- |
+| D       | N.C. | C-4      | Runs Score Motor                                         |
+| C       | N.C. | D-15     | In the circuit, pulses the advance unit step-up coil     |
+| B       | N.O. | B-1      | Energizes Skylab bank reset coil, through cam switch 2B. |
+| A       | N.O. | D-12     | Holds circuit to this relay, through CAM switch 5C.      |
+

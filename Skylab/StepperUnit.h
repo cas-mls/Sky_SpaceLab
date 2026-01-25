@@ -14,9 +14,7 @@ class StepperUnit
 		StepperUnit() {
 			limit = 0;
 			endOfStroke = false;
-			priorEndOfStroke = false;
 			value = 0;
-			priorValue = 0;
 			name = "";
 			stepType = Up;
 		}
@@ -24,24 +22,83 @@ class StepperUnit
 		StepperUnit(std::string n, int Limit, stepperTypes steptype = Up) {
 			limit = Limit;
 			endOfStroke = false;
-			priorEndOfStroke = false;
 			value = 0;
-			priorValue = 0;
 			name = n;
 			stepType = steptype;
 		}
 		~StepperUnit()
 		{
 		}
+
+		StepperUnit(const StepperUnit &self)
+		{
+			name = self.name;
+			value = self.value;
+			endOfStroke = self.endOfStroke;
+			stepType = self.stepType;
+			limit = self.limit;
+		}
+
+		void Assign(StepperUnit self)
+		{
+			bool test = self.name == "scoreMotor";
+			name = self.name;
+			value = self.value;
+			//	eos		new.eof	next.eof
+			//	1		1			0
+			//	1		0			0
+			//	0		1			1
+			//	0		0			0
+			if (endOfStroke && self.endOfStroke)
+				endOfStroke = false;
+			else 
+				endOfStroke = self.endOfStroke;
+			stepType = self.stepType;
+			limit = self.limit;
+		}
+
+		void AssignEos(StepperUnit self)
+		{
+			bool test = self.name == "scoreMotor";
+			endOfStroke = self.endOfStroke;
+		}
+
 		void reset()
 		{
 			endOfStroke = false;
 			value = 0;
 		}
 
-		std::string to_string() const
+		std::string Print(StepperUnit prior, bool change)
 		{
-			return std::to_string(value);
+			std::string output;
+			if (prior.value != value)
+			{
+				if (change)
+					output += "stp " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+				else
+					output += "stp " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+			}
+			else
+				if (!change)
+					output += "stp " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+			return output;
+		}
+
+		std::string PrintEos(StepperUnit prior, bool change)
+		{
+			std::string output;
+			if (prior.endOfStroke != endOfStroke)
+			{
+				if (change)
+					output += "eos " + name + " = " + std::to_string(endOfStroke) + ", prior = " + std::to_string(prior.endOfStroke);
+				else 
+					output += "eos " + name + " = " + std::to_string(endOfStroke) + ", prior = " + std::to_string(prior.endOfStroke);
+			}
+			else
+				if (!change)
+					output += "eos " + name + " = " + std::to_string(endOfStroke) + ", prior = " + std::to_string(prior.endOfStroke);
+			return output;
 		}
 
 		void ResetEos()
@@ -72,18 +129,16 @@ class StepperUnit
 
 		int operator++(int) 
 		{ 
+			if (endOfStroke) return value;
+
 			if (value < limit)
 			{
-				priorValue = value;
-				priorEndOfStroke = endOfStroke;
 				endOfStroke = true;
 				return value++;
 			}
 			else
 				if (stepType == Continuous)
 				{
-					priorEndOfStroke = endOfStroke;
-					priorValue = value;
 					value = 0;
 					endOfStroke = true;
 					return value;
@@ -96,6 +151,8 @@ class StepperUnit
 
 		int operator--(int)
 		{
+			if (endOfStroke) return value;
+
 			if (value > 0 && stepType == UpDown)
 			{
 				endOfStroke = true;
@@ -105,7 +162,11 @@ class StepperUnit
 				return value;
 		}
 
-		int operator=(const int value) { return value; }
+		int operator=(const int val) 
+		{ 
+			value = val;
+			return val;
+		}
 
 		operator int& () { return value; }
 
@@ -115,9 +176,7 @@ class StepperUnit
 
 	private:
 		int value;
-		int priorValue;
 		bool endOfStroke;
-		bool priorEndOfStroke;
 		int limit;
 		std::string name;
 		stepperTypes stepType;

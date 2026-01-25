@@ -1,0 +1,34 @@
+{signal: [
+  {name: 'S&K&Y&L&A&B sws', wave: '0.10.........',
+   							node: '..a'},
+  {name: 'S&K&Y&L&A&B res',	wave: '0.1..0......',
+   							node: '..b'},
+  {name: 'SKYLAB_re', 		wave: '0..1....0....',
+   							node: '...e'},
+  {name: 'SKYLAB_re(D) SM go', 	wave: '0..1....0....'},
+  {name: 'SKYLAB_re(C)', 	wave: '0..1....0....'},
+  {name: 'SKYLAB_re(B) (SL R/S)', 	wave: '0..1....0....'},
+  {name: 'SKYLAB_re(A) (Lock)', 	wave: '0..1....0....',
+   									node: '...d'},
+  {name: 'ScoreMotor', 		wave: '2..345672........', 
+   							data: ['ind','1','2','3','4','5/6','ind']},
+  {name: 'SM-5C (N.C.)', 	wave: '1......01....',
+   							node: '...c'},
+  {name: 'SM-2B (SL R/S)', wave: '0...10........'},
+  {name: 'SKYLAB Bank Reset', 	wave: '0...10........'},
+  
+  {},
+  {},
+ 
+    {},
+],
+
+
+  
+head: {text: [
+  'tspan',
+    ['tspan', {class:'h1'}, 'Skylab '],
+  ]
+},  
+  edge: ['a~>b', 'b~->e r-re', 'd->e g-y', 'c-d br-1(&&)']
+  }
