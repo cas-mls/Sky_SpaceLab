@@ -9,8 +9,6 @@ class StepperUnit
 
 		enum stepperTypes {Up, UpDown, Continuous};
 
-		static bool change;
-
 		StepperUnit() {
 			limit = 0;
 			endOfStroke = false;
@@ -50,9 +48,13 @@ class StepperUnit
 			//	0		1			1
 			//	0		0			0
 			if (endOfStroke && self.endOfStroke)
+			{
 				endOfStroke = false;
-			else 
+			}
+			else
+			{
 				endOfStroke = self.endOfStroke;
+			}
 			stepType = self.stepType;
 			limit = self.limit;
 		}
@@ -85,19 +87,44 @@ class StepperUnit
 			return output;
 		}
 
+		std::string PrintNot(int notValue)
+		{
+			std::string output;
+			if (value != notValue)
+			{
+				output += "stp " + name + " = " + std::to_string(value);
+			}
+			return output;
+		}
+
+
 		std::string PrintEos(StepperUnit prior, bool change)
 		{
 			std::string output;
-			if (prior.endOfStroke != endOfStroke)
+			bool tmpEos;
+			bool tmpPriorEos;
+			//std::cout << "PrintEos Print Eos" << printEos << "\n";
+			if (endOfStroke && prior.endOfStroke)
+			{
+				tmpEos = false;
+				tmpPriorEos = true;
+			}
+			else
+			{
+				tmpEos = endOfStroke;
+				tmpPriorEos = prior.endOfStroke;
+			}
+
+			if (tmpPriorEos != tmpEos)
 			{
 				if (change)
-					output += "eos " + name + " = " + std::to_string(endOfStroke) + ", prior = " + std::to_string(prior.endOfStroke);
+					output += "eos " + name + " = " + std::to_string(tmpEos) + ", prior = " + std::to_string(tmpPriorEos);
 				else 
-					output += "eos " + name + " = " + std::to_string(endOfStroke) + ", prior = " + std::to_string(prior.endOfStroke);
+					output += "eos " + name + " = " + std::to_string(tmpEos) + ", prior = " + std::to_string(tmpPriorEos);
 			}
 			else
 				if (!change)
-					output += "eos " + name + " = " + std::to_string(endOfStroke) + ", prior = " + std::to_string(prior.endOfStroke);
+					output += "eos " + name + " = " + std::to_string(tmpEos) + ", prior = " + std::to_string(tmpPriorEos);
 			return output;
 		}
 
@@ -175,10 +202,10 @@ class StepperUnit
 		friend std::ostream& operator<<(std::ostream& os, const StepperUnit& p);
 
 	private:
+		std::string name;
 		int value;
 		bool endOfStroke;
 		int limit;
-		std::string name;
 		stepperTypes stepType;
 };
 

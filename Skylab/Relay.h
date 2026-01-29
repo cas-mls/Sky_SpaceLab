@@ -6,7 +6,8 @@
 class Relay
 {
 	public:
-		static bool change;
+
+		enum DeviceTypes { Solenoid, RelayType, Switch };
 
 		Relay() 
 		{
@@ -14,10 +15,24 @@ class Relay
 			name = "";
 		}
 
-		Relay(std::string n) 
+		Relay(std::string n, DeviceTypes type) 
 		{
 			value = false;
 			name = n;
+			switch (type)
+			{
+			case Solenoid:
+				typeString = "sol ";
+				break;
+			case RelayType:
+				typeString = "re ";
+				break;
+			case Switch:
+				typeString = "sw ";
+				break;
+			default:
+				break;
+			}
 		}
 
 
@@ -25,6 +40,7 @@ class Relay
 		{
 			name = self.name;
 			value = self.value;
+			typeString = self.typeString;
 		}
 
 
@@ -45,17 +61,30 @@ class Relay
 
 		std::string Print(Relay prior, bool change)
 		{
+
+
+
 			std::string output;
 			if (prior.value != value)
 			{
 				if (change)
-					output += "re " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+					output += typeString + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
 				else
-					output += "re " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+					output += typeString + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
 			}
 			else
 				if (!change)
-					output += "re " + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+					output += typeString + name + " = " + std::to_string(value) + ", prior = " + std::to_string(prior.value);
+			return output;
+		}
+
+		std::string Print(bool prntValue)
+		{
+			std::string output;
+			if (prntValue = value)
+			{
+					output += "re " + name + " = " + std::to_string(value);
+			}
 			return output;
 		}
 
@@ -69,6 +98,7 @@ class Relay
 	private:
 		bool value;
 		std::string name;
+		std::string typeString;
 };
 
 

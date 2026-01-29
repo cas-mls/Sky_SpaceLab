@@ -1,7 +1,5 @@
 #include "Relay.h"
 
-bool Relay::change = false;
-
 // Overload the << operator
 std::ostream& operator<<(std::ostream& os, const Relay& re) {
 	

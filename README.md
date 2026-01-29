@@ -15,31 +15,7 @@
 * [Inside Cabinet](InsideCabinetAnnotated.png)
 * [Back Cabinet](BackCabinetAnnotated.png)
 
-## Possible Fix
-
-### Score not Resetting
-
-The 1000 score is not resetting when the reset button is pressed. The number doesn't move.  If I manually reset the scoring drum to zero, then the machine work ok.
-
- 1. Score Reset Relay for 1000 Point Cam contact cleaning.
-
-    ![ResetRelay_1000Cam](ResetRelay_1000Cam.png)
-
-### Tilt switches are too sensitive
-
-1. Coin slap
-2. Plumb Bob
-3. Lift Ball
-4. Kick
-5. Under the playing area
-
-[Williams Skylab when turned on says TILT after previously playing fine](https://pinside.com/pinball/forum/topic/williams-skylab-when-turned-on-says-tilt-after-previously-playing-fine)
-
-![](TiltRelay1.png)
-
-![Lock Relay](LockRelay.png)
-
-![](CreditRelay.png)
+## Status:
 
 ## 16 -Jan-2026
 
@@ -61,28 +37,18 @@ The 1000 score is not resetting when the reset button is pressed. The number doe
     * It fixed itself after some time working on other issues.
     * During the reset, the first latched relay goes off and on, and the knocker is energized.
 * Pressing the "S" and "K" causes the 10's drum to keep going and the Score Motor keep running.  Also, related to the 10's Drum is working if the rest of the "SKYLAB" is pressed, then the Advance Unit also runs, making a large racket.
-  * Check the 50 Point Relay; it might not be shutting off.
+  * Check the 50 Point Relay; it might not be shutting off. (Fixed Issue #4, Not sure if it is registering points.)
 * Five balls in-line
-  * Not sure if this is working correctly.
+  * Not sure if this is working correctly. (Wrote Issue #5)
 
-### Lock
+## 21-Jan-2026
 
-| Contact | Type | Location | Description                                                  |
-| ------- | ---- | -------- | ------------------------------------------------------------ |
-| E       | N.C. | E-3      | In the circuit to reset the relay                            |
-| D       | N.C. | D-6      | In Series with Switch C on Game Over Relay                   |
-| C       | N.O. | A-1      | 6 Volts from the transformer to the lights.                  |
-| B       | N.O. | A-1      | 6 Volts from the transformer to the lights.                  |
-| A       | N.O. | E-4      | In the hold circuit to this relay, through the cabinet bottom kick-off switch. |
-
-### Skylab
-
-Energized by a series circuit through the switches on S-K-Y-L-A-B relays.
-
-| Contact | Type | Location | Description                                              |
-| ------- | ---- | -------- | -------------------------------------------------------- |
-| D       | N.C. | C-4      | Runs Score Motor                                         |
-| C       | N.C. | D-15     | In the circuit, pulses the advance unit step-up coil     |
-| B       | N.O. | B-1      | Energizes Skylab bank reset coil, through cam switch 2B. |
-| A       | N.O. | D-12     | Holds circuit to this relay, through CAM switch 5C.      |
+	* Verify that the 1000 Point Continuous running has been fixed. (Close Issue #3).
+	* Verify that the 5 Balls In-Line is working (Close Issue #5)
+	* Fixed the 5-Ball Setting not working by cleaning up the Ball Stepper (Close Issue #6).
+	* SKYLAB causes the Score Motor to continue to work without stopping (Wrote Issue #13).
+	* Vacuum inside the machine; clean and wax the Playfield; clean contacts. Didn't find any lights to replace. (Issue #8)
+	*  Playfield Inserts are loose and crooked (Wrote Issue #11)
+	* Right Flipper does not hold the ball.  Adjust the End of Stroke contact.  But look into rebuilding flippers. (Wrote Issue #12)
+	* Notice that loose legs cause the Tilt.  The research cost to fix the legs. (Wrote Issue #9)
 
