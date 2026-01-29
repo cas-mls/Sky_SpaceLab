@@ -14,6 +14,7 @@
 * [Schematic](Williams_1974_Skylab_Schematic_submitted_by_Steve_Corley_Annotated.pdf)
 * [Inside Cabinet](InsideCabinetAnnotated.png)
 * [Back Cabinet](BackCabinetAnnotated.png)
+* [Under Playfield](UnderPlayFieldAnnotated.png)
 
 ## Status:
 
