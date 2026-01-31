@@ -56,21 +56,14 @@
 
 ## 21-Jan-2026
 
-Verify that the 1000 Point Continuous running has been fixed. (Close Issue #3).
-
-Verify that the 5 Balls In-Line is working (Close Issue #5)
-
-Fixed the 5-Ball Setting not working by cleaning up the Ball Stepper (Close Issue #6).
-
-SKYLAB causes the Score Motor to continue to work without stopping (Wrote Issue #13).
-
-Vacuum inside the machine; clean and wax the Playfield; clean contacts. Didn't find any lights to replace. (Issue #8)
-
-Playfield Inserts are loose and crooked (Wrote Issue #11)
-
-Right Flipper does not hold the ball.  Adjust the End of Stroke contact.  But look into rebuilding flippers. (Wrote Issue #12)
-
-Notice that loose legs cause the Tilt.  The research cost to fix the legs. (Wrote Issue #9)
+- Verify that the 1000 Point Continuous running has been fixed. (Close Issue #3).
+- Verify that the 5 Balls In-Line is working (Close Issue #5)
+- Fixed the 5-Ball Setting not working by cleaning up the Ball Stepper (Close Issue #6).
+- SKYLAB causes the Score Motor to continue to work without stopping (Wrote Issue #13).
+- Vacuum inside the machine; clean and wax the Playfield; clean contacts. Didn't find any lights to replace. (Issue #8)
+- Playfield Inserts are loose and crooked (Wrote Issue #11)
+- Right Flipper does not hold the ball.  Adjust the End of Stroke contact.  But look into rebuilding flippers. (Wrote Issue #12)
+- Notice that loose legs cause the Tilt.  The research cost to fix the legs. (Wrote Issue #9)
 
 ## 30-Jan-2026
 
